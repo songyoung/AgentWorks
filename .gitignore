@@ -14,7 +14,8 @@ venv/
 .env
 
 # ── 工作区目录（由 FilesystemMiddleware 管理） ──
-workspace/
+workspace/*
+!workspace/agents/
 
 # ── SQLite 数据库文件（运行时自动生成） ──
 *.db

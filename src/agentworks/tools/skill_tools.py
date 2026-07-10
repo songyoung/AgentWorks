@@ -18,6 +18,7 @@ SKILL_REGISTRY: dict[str, Any] = {
     "jira_ticket": None,  # Jira 工单管理
     "test_generation": None,  # 测试用例生成
     "hmi_rule_check": None,  # HMI 规则检查
+    "script_flow_analysis": None,  # 脚本流程梳理
 }
 
 
