@@ -1,0 +1,34 @@
+# 评估器配置规格
+# 定义 LLMJudge 的评估维度与评分模式
+
+verifier:
+  # ── 评估维度（多维度综合评分） ──
+  dimensions:
+    - name: "accuracy"
+      weight: 0.30
+      description: "内容准确性 —— 生成内容是否与输入需求一致"
+
+    - name: "completeness"
+      weight: 0.25
+      description: "内容完整性 —— 是否覆盖用户要求的所有要点"
+
+    - name: "clarity"
+      weight: 0.20
+      description: "表达清晰度 —— 文字表述是否简洁明了"
+
+    - name: "relevance"
+      weight: 0.15
+      description: "内容相关性 —— 生成内容是否紧扣主题"
+
+    - name: "safety"
+      weight: 0.10
+      description: "安全合规 —— 内容是否合规且无敏感信息"
+
+  # ── 评分模式 ──
+  scoring_mode: "standard"        # standard: 加权平均
+  passing_threshold: 0.7          # 单维度通过阈值（与 loop.quality_threshold 对齐）
+
+  # ── 反馈配置 ──
+  feedback:
+    detailed: true                # 是否生成详细反馈
+    max_suggestions: 3            # 最多返回改进建议条数

@@ -1,0 +1,58 @@
+# AgentWorks 确定性工程硬约束规则
+# 以下 8 条规则为硬约束，所有代码生成与修改必须遵守
+
+rules:
+  - id: R1
+    name: 状态契约先行
+    description: >
+      新增任何字段之前，必须先更新 src/agentworks/core/state.py 中
+      AgentState 的字段定义（TypedDict）。不得在未声明字段的情况下
+      在其他模块中直接引用新字段。
+
+  - id: R2
+    name: 节点职责单一
+    description: >
+      gather（输入解析与上下文压缩）、action（工具调用与内容生成）、
+      verify（质量评估与反馈生成）、repeat（条件路由判断）四个节点的职责
+      必须保持单一，不得交叉。verify 节点严禁调用任何生成类工具。
+
+  - id: R3
+    name: 工具强制注册
+    description: >
+      所有被 action 节点调用的函数，必须在 src/agentworks/tools/__init__.py
+      中通过 register_tool() 函数显式追加到 TOOL_REGISTRY 列表。
+      未注册的工具不得在 action 节点中使用。
+
+  - id: R4
+    name: 技能预先声明
+    description: >
+      新增任何 Skill 之前，必须在 src/agentworks/tools/skill_tools.py
+      的 SKILL_REGISTRY 字典中预置键名，初始值为 None。
+      后续实现加载器时再替换为实际类。
+
+  - id: R5
+    name: 评估与生成隔离
+    description: >
+      verify 节点（含 LLMJudge 类）不得调用任何生成类工具。
+      评估逻辑与内容生成逻辑必须在代码层面完全隔离。
+
+  - id: R6
+    name: 重试防失控
+    description: >
+      repeat 节点必须在每次路由前检查 retry_count >= max_retries。
+      若条件成立，必须强制将 is_complete 设为 True 并跳转到 END，
+      防止无限循环。
+
+  - id: R7
+    name: 配置外置
+    description: >
+      所有质量阈值、重试次数、Token 限制、中间件参数等业务配置
+      必须从 configs/*.yaml 读取，严禁在代码中硬编码任何魔法数字。
+      允许通过同名环境变量覆盖 YAML 配置值。
+
+  - id: R8
+    name: LLM 回退显式
+    description: >
+      任何调用外部 LLM 模型的位置，必须在代码中显式声明 fallback 行为
+      （如降级到备选模型、返回缓存结果、或抛出明确异常）。
+      不得隐式依赖单一模型的可用性。

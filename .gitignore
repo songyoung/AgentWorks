@@ -1,0 +1,34 @@
+# ── Python ──
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+
+# ── 虚拟环境 ──
+.venv/
+venv/
+
+# ── 环境变量（含密钥） ──
+.env
+
+# ── 工作区目录（由 FilesystemMiddleware 管理） ──
+workspace/
+
+# ── SQLite 数据库文件（运行时自动生成） ──
+*.db
+agentworks_checkpoints.db
+
+# ── IDE ──
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── OS ──
+.DS_Store
+Thumbs.db
+
+# ── ruff ──
+.ruff_cache/

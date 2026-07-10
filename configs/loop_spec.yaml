@@ -1,0 +1,24 @@
+# Loop Engineering 四阶段循环规格配置
+# 所有业务阈值优先从此文件读取，允许通过同名环境变量覆盖
+
+loop:
+  # ── 四阶段节点名称 ──
+  nodes:
+    gather: "gather"       # 输入解析与上下文压缩
+    action: "action"       # 工具调用与任务执行
+    verify: "verify"       # 质量评估与反馈生成
+    repeat: "repeat"       # 条件路由判断
+
+  # ── 重试与质量阈值 ──
+  max_retries: 3           # 最大重试次数
+  quality_threshold: 0.7   # 质量阈值（0~1），达标后终止循环
+
+  # ── 上下文管理 ──
+  context_token_limit: 8000       # 上下文最大 Token 数
+  keep_recent_messages: 5         # 压缩时保留最近消息数
+
+  # ── 路由标签 ──
+  route_tags:
+    continue: "continue"             # 质量达标，结束
+    retry: "retry"                   # 需重试，回到 action
+    refine_context: "refine_context" # 需优化上下文，回到 gather
